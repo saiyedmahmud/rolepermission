@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolePermissionController;
@@ -18,6 +19,8 @@ use App\Http\Controllers\RolePermissionController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('sendmail', [MailController::class, 'sendmail']);
 
 // ___________________________Role Route Start__________________________________
 
@@ -60,5 +63,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('cacheclear', function(){
+    Artisan::call('cache:clear');
+    return redirect()->route('dashboard');
+})->name('cacheClear');
 
 require __DIR__.'/auth.php';
